@@ -47,7 +47,8 @@ var comcastifyjs = (function () {
         boxColor: args.boxColor || '#000000',       // color of box overlay
         loadMaxPercent: args.loadMaxPercent || 0.0, // max percentage to load images
         loadSpeed: args.loadSpeed || 500,           // how often in ms to pass
-        loadIncrement: args.loadIncrement || 1      // pixels to load per pass
+        loadIncrement: args.loadIncrement || 1,      // pixels to load per pass
+        fastLaneWhitelist: args.fastLaneWhitelist || [], // domains to whitelist
       };
 
       // make 'em load slow
@@ -56,6 +57,11 @@ var comcastifyjs = (function () {
         var img = params.elements[i],
             parent = img.parentNode,
             slowload = document.createElement('DIV');
+
+        // whitelisted?
+        if (params.fastLaneWhitelist.indexOf((new URL(img.src)).hostname) !== -1) {
+            continue;
+        }
 
         // set up initial state of box
         slowload.style.backgroundColor = params.boxColor;
